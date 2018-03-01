@@ -1,13 +1,18 @@
 <#
-    .SYNOPSIS
-    Splits a video into clips
-    .DESCRIPTION
-    Uses the metadata passed in to segment video clips from a video file
-    .EXAMPLE
-    Get-Clips
-    .PARAMETER FilePath
-    The relative path to the Video file
-    #>
+
+.SYNOPSIS
+Splits a video into clips
+
+.DESCRIPTION
+Uses the metadata passed in to segment video clips from a video file
+
+.EXAMPLE
+Get-Clips
+
+.PARAMETER FilePath
+The relative path to the Video file
+
+#>
 
 [CmdletBinding()]
 param
