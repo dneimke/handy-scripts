@@ -8,6 +8,7 @@ The aim is to organize the repository in a sensible way and to write scripts usi
 
 * [Approved Verbs for Windows PowerShell Commands](https://msdn.microsoft.com/en-us/library/ms714428(v=vs.85).aspx)
 * [Strongly Encouraged Development Guidelines](https://msdn.microsoft.com/en-us/library/dd878270(v=vs.85).aspx)
+* [Download ffMpeg](https://www.ffmpeg.org/download.html)
 
 
 ## Meta
