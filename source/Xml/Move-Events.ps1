@@ -7,8 +7,12 @@ Moves events in a SportsCode Xml data file
 Move all or just a subset of events based on Time-Start, Time-End, Filter
 
 .EXAMPLE
-Move-Events -Path ./Match1.xml -Start 3 -End 200 -Value 20 -Filter Outlet
-This command moves all events in the Outlet code forward by 20 seconds that are between 3 and 200 seconds 
+Moves all events in the Outlet code forward by 20 seconds that are between 3 and 200 seconds 
+.\Move-Events.ps1 -Path ./Match1.xml -Start 3 -End 200 -Value 20 -Filter Outlet
+
+.EXAMPLE
+Moves all events backward by 364 seconds that are after 2300 seconds 
+.\Move-Events.ps1 -Path 'North East-AHC PLM 5_05_2018 2018 PLW.xml' -Value -364 -Start 2300
 
 .PARAMETER Path
 The relative path to the data file
@@ -53,13 +57,15 @@ param
 
 function IsMatch($Node, [int]$Start, [int]$End, [string]$Filter) {
 
+    $startSeconds = [double]$Node.start
+    $endSeconds = [double]$Node.end
 
-    if ($Start -gt 0 -and ($Node.start -lt $Start -or $Node.end -lt $Start)) {
+    if ($Start -gt 0 -and ($startSeconds -lt $Start -or $endSeconds -lt $Start)) {
         # Write-Host "False Start: $Start; Node Start: $($Node.start); Node End: $($Node.end)"
         return $false
     }
 
-    if ($End -gt 0 -and ($Node.start -gt $End -or $Node.end -gt $End)) {
+    if ($End -gt 0 -and ($startSeconds -gt $End -or $endSeconds -gt $End)) {
         # Write-Host "False End: $End; Node Start: $($Node.start); Node End: $($Node.end)"
         return $false
     }
@@ -82,16 +88,19 @@ $xml.Load($Path)
 
 foreach ($item in (Select-XML -Xml $xml -XPath '//instance')) {
 
-    $startSeconds = $item.node.start
-    $endSeconds = $item.node.end
+    # Write-Host "Start: $($item.node.start); End: $($item.node.end)."
+    $startSeconds = [double]$item.node.start
+    $endSeconds = [double]$item.node.end
     $code = $item.node.code
    
     if (IsMatch -Node $item.node -Start $Start -End $End -Filter $Filter) {
         
-        Write-Host "Start: $startSeconds; End: $endSeconds; Code: $code"
+        $newStart = ($startSeconds + $Value).ToString()
+        $newEnd = ($endSeconds + $Value).ToString()
+        Write-Host "Old: Start: $startSeconds; End: $endSeconds;. New: Start: $newStart; End: $newEnd;  Code: $code"
        
-        $item.node.start = $startSeconds + $Value
-        $item.node.end = $endSeconds + $Value
+        $item.node.start = $newStart
+        $item.node.end = $newEnd
     }
 }
 
