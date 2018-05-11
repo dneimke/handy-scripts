@@ -32,14 +32,18 @@ This script will perform the following actions:
 The filename of the payload file
 
 .EXAMPLE
-.\New-ClipsVideo.ps1 outletting_playlist.json
+.\New-ClipsVideo.ps1 outletting_playlist.json -Payload 'foo.json'
 #>
 
 param(
-    $Payload = $(throw "Supply the payload filename")
+    [string]$Payload = $(throw "Supply the payload filename"),
+    [string]$Font = '/Library/Fonts/Microsoft/Eurostile',
+    [string]$VideoFile    
 )
 
 write-host "`nPlaylist Extractor`n"
+
+Write-Host "Config: Font: $Font; VideoFile: $VideoFile"
 
 #$FFMPEG_OPTS = "-loglevel quiet -hide_banner -nostats"
 $TITLE = "Match Share"
@@ -50,6 +54,10 @@ if((Test-Path "$($Payload)") -eq $False) {
 }
 
 $Data = Get-Content $Payload | convertfrom-json
+
+if($VideoFile) {
+    $Data.videoUrl = $VideoFile
+}
 
 $InputFile = $data.videoUrl
 $PlayList = $Data.PlaylistName
@@ -71,8 +79,9 @@ $Clips | foreach-object {
     $Duration = $_.Duration
     $Description = $_.Description
 
-    Write-Host -ForegroundColor Cyan "     + [$ClipId] [$StartOffset,$Duration] '$Description'"
-    ffmpeg -loglevel quiet -hide_banner -ss $StartOffset -t $Duration -i $InputFile -filter_complex "drawtext=:fontfile=/Library/Fonts/Microsoft/Eurostile:fontcolor=yellow:fontsize=48:text='$Description':x=main_w-(text_w+12):y=main_h-(text_h+12), drawtext=:fontfile=/Library/Fonts/Microsoft/Eurostile:fontcolor=white:fontsize=32:text='$TITLE':x=(12):y=(text_h+12)" $ClipFile -y
+    Write-Host -ForegroundColor Cyan "     + ($ClipFile) - [$ClipId] [$StartOffset, $Duration] '$Description'"
+    ffmpeg -loglevel quiet -hide_banner -ss $StartOffset -i $InputFile -c copy -t $Duration $ClipFile 
+    #ffmpeg -loglevel quiet -hide_banner -ss $StartOffset -t $Duration -i $InputFile -filter_complex "drawtext=:fontfile=$Font:fontcolor=yellow:fontsize=48:text='$Description':x=main_w-(text_w+12):y=main_h-(text_h+12), drawtext=:fontfile=$Font:fontcolor=white:fontsize=32:text='$TITLE':x=(12):y=(text_h+12)" $ClipFile -y
 }
 
 #
@@ -97,6 +106,9 @@ if(Test-Path "$($PlayList).list") {
 # Cleanup files
 #
 if(Test-Path "$($PlayList).mp4") {
-    remove-item "$($Playlist)_?.mp4"
+    Write-Host "Cleaning $($PlayList).mp4"
+    remove-item "$($Playlist)_*.mp4"
     remove-item "$($Playlist).list"
+}else{
+    Write-Host "Not Cleaning $($PlayList).mp4" 
 }
