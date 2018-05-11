@@ -5,7 +5,7 @@ param (
     [String]$Username = $(throw "A Username was not supplied")
 )
 
-Function Import-FromAzureExport {
+function Import-FromAzureExport {
     <#
         .SYNOPSIS
         Automates the process of restoring Azure exported database files into a LocalDb instance
