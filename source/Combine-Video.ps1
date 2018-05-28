@@ -1,7 +1,10 @@
 
-$InputFolderPath = "C:\users\darre\Videos\2018\PLW_R6_BHCvPADHC"    
-$Extension = "m2ts"
-$OutputFile = 'C:\temp\foo.m2ts'
+
+param(
+    [string]$InputFolderPath = $(throw "Supply the input folder path"),
+    [string]$Extension = $(throw "Supply an extension"),
+    [string]$OutputFile = $(throw "Specify an output file")   
+)
 
 $tmp = New-TemporaryFile
 
@@ -10,8 +13,8 @@ Write-Host "Created temp file $($tmp.FullName)"
 $stream = [System.IO.StreamWriter] $tmp.FullName
 
 gci -Path $InputFolderPath -filter "*.$Extension" | % {
-    Write-Host "Adding file $InputPath\$_"
-    $stream.WriteLine("file '$InputPath\$_'")
+    Write-Host "Adding file $($_.FullName)"
+    $stream.WriteLine("file '$($_.FullName)'")
 }
 
 $stream.close()
