@@ -19,6 +19,8 @@ The relative path to the second data file
 .PARAMETER Offset
 Number of seconds to offset for the second file's events
 
+.PARAMETER Verbose
+
 #>
 
 param
@@ -83,7 +85,6 @@ foreach ($item in (Select-Xml -Xml $xml2 -XPath "//instance")) {
    
     $newStart = ($startSeconds + $Offset).ToString()
     $newEnd = ($endSeconds + $Offset).ToString()
-    Write-Host "Old: Start: $startSeconds; End: $endSeconds; New: Start: $newStart; End: $newEnd;  Code: $code"
     
     $item.node.ID = (++$counter).ToString()
     $item.node.start = $newStart
@@ -93,11 +94,15 @@ foreach ($item in (Select-Xml -Xml $xml2 -XPath "//instance")) {
     $doc.LoadXml($item.node.OuterXml)
     $node = $doc.DocumentElement;  
 
+    Write-Verbose "Old: Start: $startSeconds; End: $endSeconds; New: Start: $newStart; End: $newEnd;  Code: $code"
+
     $e = $xml1.ImportNode($node, $true);
-    $xml1.file.ALL_INSTANCES.AppendChild($e)
+    $xml1.file.ALL_INSTANCES.AppendChild($e) | out-null
 }
 
 $NewPath = "$env:temp\combined.xml"
-Write-Host $NewPath
+Write-Verbose $NewPath
 $xml1.Save($NewPath)
 code-insiders $NewPath
+
+return $NewPath

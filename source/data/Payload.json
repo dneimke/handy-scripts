@@ -1,0 +1,22 @@
+{
+  "path": "/Users/darre/Videos/2018-SuperLeague/Round 2/Men",
+  "outputPath": "/Users/darre/Videos/2018-SuperLeague/Round 2/Men/SLM-R2-Full.xml",
+  "sets": [
+      {
+          "file": "M-1.xml",
+          "video": "00002.MTS"
+      },
+      {
+          "file": "M-2.xml",
+          "video": "00003.MTS"
+      },
+      {
+          "file": "M-3.xml",
+          "video": "00004.MTS"
+      },
+      {
+          "file": "M-4.xml",
+          "video": "00005.MTS"
+      }
+  ]
+}
