@@ -23,25 +23,25 @@ The SportsCode XML commands are useful when you need to manipulate data files an
 Moves all events backward by 364 seconds that are after 2300 seconds 
 
 ```powershell
-Move-Events -Path ./YourSportscodeFile.xml -Value -364 -Start 2300
+Move-Events -Path './YourSportscodeFile.xml' -Value -364 -Start 2300
 ```
 
-Moves all events in the ***Outlet*** code forward by 20 seconds that are between 3 and 200 seconds 
+Moves all events in the **Outlet** code forward by 20 seconds that are between 3 and 200 seconds 
 
 ```powershell
-Move-Events -Path ./YourSportscodeFile.xml -Start 3 -End 200 -Value 20 -Filter Outlet
+Move-Events -Path './YourSportscodeFile.xml' -Start 3 -End 200 -Value 20 -Filter Outlet
 ```
 
 Combines 2 files with an offset of 600 seconds (10 minutes) for the 2nd file's events 
 
 ```powershell
-Combine-Events -Path1 ./Match1.xml -Path2 ./Match2.xml -Offset 600
+Combine-Events -Path1 './Match1.xml' -Path2 './Match2.xml' -Offset 600
 ```
 
 Combines files based on an input configuration file (refer below for format of input configuration file)
 
 ```powershell
-Combine-EventsFromMetadata -Payload Payload.json
+Combine-EventsFromMetadata -Payload 'Payload.json'
 ```
 
 Input configuration file example:
