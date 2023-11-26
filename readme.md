@@ -8,7 +8,7 @@ The FFMpeg utility commands allow you to
 
 * Convert-VideoSize - uses ffmpeg to compress a video to 1080p
 * Combine-Video - combines all video files for a specified format within a folder into a single output video file
-* New-ClipsVideo - takes a [MatchShare](https://coding-tool.firebaseapp.com) data payload and uses it to generate video clips from a source video file
+* New-ClipsVideo - takes a [Matchlib.com](https://matchlib.com) data payload and uses it to generate video clips from a source video file
 
 ## SportsCode XML
 
